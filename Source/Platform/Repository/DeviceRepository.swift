@@ -8,7 +8,8 @@
 import Foundation
 
 protocol DeviceRepositoryType {
-    func sendDeviceData(notificationInfo: NotificationInfo) 
+    func sendDeviceData()
+    func saveDID(_ dID: String)
 }
 
 final class DeviceRepository: ServiceBaseRepository {
@@ -16,13 +17,14 @@ final class DeviceRepository: ServiceBaseRepository {
 
 extension DeviceRepository: DeviceRepositoryType {
     
-    func sendDeviceData(notificationInfo: NotificationInfo) {
+    func saveDID(_ dID: String) {
+        UserDefaultManager.set(value: dID, forKey: .dID)
+    }
+    
+    func sendDeviceData() {
         guard let api = api else { return }
-        let input = DeviceRequest(notificationInfo: notificationInfo)
+        let input = DeviceRequest()
         api.request(input: input) { (object: DeviceResponse?, error) in
-            if let object = object {
-                print(object.tID)
-            }
         }
     }
 }

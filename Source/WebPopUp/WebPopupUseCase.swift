@@ -8,16 +8,18 @@
 import Foundation
 
 protocol WebPopupUseCaseType {
-    func pushDataPopup(events: [MobioSDK.Dictionary])
 }
 
 struct WebPopupUseCase {
-    let trackingRepository = TrackingRepository(api: HTTPClient.shared)
+    let fileDownloader = FileDownloader.shared
 }
 
 extension WebPopupUseCase: WebPopupUseCaseType {
+}
+
+extension WebPopupUseCase: FileDownloadable {
     
-    func pushDataPopup(events: [MobioSDK.Dictionary]) {
-        trackingRepository.getTrackingData(event: "Popup To Web", properties: events)
+    func download(from urlString: String?) {
+        fileDownloader.download(from: urlString)
     }
 }

@@ -27,6 +27,8 @@ extension RecallApiRepository: RecallApiRepositoryType {
         api.request(input: input) { (object: FailAPIServerResponse?, error) in
             if error == nil {
                 completion(.success)
+            } else {
+                completion(.failse)
             }
         }
     }

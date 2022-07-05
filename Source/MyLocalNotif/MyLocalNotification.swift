@@ -15,7 +15,6 @@ public protocol MyLocalNotificationType {
 
 public class MyLocalNotification: NSObject {
     
-    // MARK: - Property
     private var center: UNUserNotificationCenter {
         let center = UNUserNotificationCenter.current()
         center.delegate = self
@@ -26,18 +25,15 @@ public class MyLocalNotification: NSObject {
     let pushRepository = PushRepository(manager: DBManager.shared)
     let trackingManager = TrackingManager()
     
-    // MARK: - Init
     public override init() {
         super.init()
         setupData()
     }
     
-    // MARK: - Setup Data
     private func setupData() {
         notificationAction.setupNotificationAction()
     }
     
-    // MARK: - Create item
     private func createContent(_ myContent: NotificationContent) -> UNMutableNotificationContent {
         let content = UNMutableNotificationContent()
         content.title = myContent.title
@@ -61,26 +57,16 @@ public class MyLocalNotification: NSObject {
     
     private func createRequest(content: NotificationContent, second: TimeInterval) -> UNNotificationRequest {
         let uuidString = UUID().uuidString
-        
-        // Step 2: Create the notification content
         let content = createContent(content)
-        
-        // Step 3: Create the notification trigger
         let trigger = createTrigger(with: second)
-        
         let request = UNNotificationRequest(identifier: uuidString, content: content, trigger: trigger)
         return request
     }
     
     private func createRequest(content: NotificationContent, component: DateComponents) -> UNNotificationRequest {
         let uuidString = UUID().uuidString
-        
-        // Step 2: Create the notification content
         let content = createContent(content)
-        
-        // Step 3: Create the notification trigger
         let trigger = createTrigger(dateComponents: component)
-        
         let request = UNNotificationRequest(identifier: uuidString, content: content, trigger: trigger)
         return request
     }
@@ -89,25 +75,14 @@ public class MyLocalNotification: NSObject {
 extension MyLocalNotification: MyLocalNotificationType {
 
     public func pushNotif(with content: NotificationContent, after second: TimeInterval) {
-        print("-------- debug -------- notif content = \(content) ------ with time = \(second)")
-        
-        // Step 4: Create the request
         let request = createRequest(content: content, second: second)
-        
-        // Step 5: Register the request
         center.add(request) { (error) in
-            // Check the error parameter and handle any errors
-            print("-------- debug -------- notif error = ", error.debugDescription)
         }
     }
     
     public func pushNotif(with content: NotificationContent, component: DateComponents) {
-        // Step 4: Create the request
         let request = createRequest(content: content, component: component)
-        
-        // Step 5: Register the request
         center.add(request) { (error) in
-            // Check the error parameter and handle any errors
         }
     }
 }
@@ -122,14 +97,12 @@ extension MyLocalNotification: UNUserNotificationCenterDelegate {
         let title = content.title
         let state = UIApplication.shared.applicationState
         let properties = ["title": title]
-        track(name: "notification_willpresent", properties: [properties])
+        track(name: "notification_willpresent", properties: properties)
         if state == .background || state == .inactive {
-            print("------ debug 1-----: app from background ----- title = ", title)
             completionHandler([.badge, .alert, .sound])
         } else if state == .active {
             let userInfo = content.userInfo
             if let pushID = userInfo[NotificationContentUserInfo.pushData.rawValue] as? String {
-                print("------ debug 1-----: app from active ----- title = ", pushID)
                 pushIsNotShowed(pushID)
             }
             completionHandler([])
@@ -157,7 +130,7 @@ extension MyLocalNotification: PushRepositoryDelegate {
 
 extension MyLocalNotification: Trackable {
     
-    func track(name: String, properties: [MobioSDK.Dictionary]) {
+    func track(name: String, properties: MobioSDK.Dictionary) {
         trackingManager.track(name: name, properties: properties)
     }
 }

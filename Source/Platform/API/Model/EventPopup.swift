@@ -10,7 +10,7 @@ import Foundation
 struct EventPopup {
     var eventKey: String
     var includedReport: Bool
-    var eventData: EventDataPopup
+    var eventData: EventDataTracking
 }
 
-extension EventPopup: Decodable { }
+extension EventPopup: Codable { }

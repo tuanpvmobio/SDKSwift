@@ -1,8 +1,7 @@
 //
 //  UIView+.swift
-//  MovieMVVM
 //
-//  Created by admin on 8/28/21.
+//  Created by Mobio on 8/28/21.
 //
 
 import UIKit

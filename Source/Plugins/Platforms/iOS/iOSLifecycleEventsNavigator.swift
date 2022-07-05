@@ -11,16 +11,6 @@ struct iOSLifecycleEventsNavigator {
     
 }
 
-extension iOSLifecycleEventsNavigator: Navigationable {
-    func showHTMLPopup(urlString: String) {
-        let webPopupNavigator = WebPopupNavigator()
-        let webPopupUseCase = WebPopupUseCase()
-        let viewModel = WebPopupViewModel(urlString: urlString,
-                                          navigator: webPopupNavigator,
-                                          useCase: webPopupUseCase)
-        let webviewController = WebPopupViewController()
-        webviewController.bindViewModel(webPopupViewModel: viewModel)
-        webviewController.modalPresentationStyle = .overFullScreen
-        navigationController?.present(webviewController, animated: true, completion: nil)
-    }
+extension iOSLifecycleEventsNavigator {
+
 }

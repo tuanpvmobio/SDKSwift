@@ -8,14 +8,12 @@
 import UIKit
 
 protocol Navigationable {
-    var navigationController: UINavigationController? { get }
+    var topViewController: UIViewController? { get }
 }
 
 extension Navigationable {
     
-    var navigationController: UINavigationController? {
-        let application = UIApplication.shared
-        let navigationController = application.windows[0].rootViewController as? UINavigationController
-        return navigationController
+    var topViewController: UIViewController? {
+        return UIApplication.getTopViewController()
     }
 }

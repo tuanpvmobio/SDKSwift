@@ -7,8 +7,7 @@
 
 import Foundation
 
-public class Configuration {
-
+@objcMembers public class Configuration: NSObject {
     var merchantID: String = ""
     var token: String = ""
 

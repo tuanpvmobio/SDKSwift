@@ -12,8 +12,8 @@ extension URLSession {
     static func configured() -> URLSession {
         let configuration = URLSessionConfiguration.ephemeral
         
-        let token = UserDefaultManager.getString(forKey: "m_token")
-        let merchantID = UserDefaultManager.getString(forKey: "m_merchant_id")
+        let token = UserDefaultManager.getString(forKey: .token)
+        let merchantID = UserDefaultManager.getString(forKey: .merchantID)
         
         configuration.timeoutIntervalForRequest = 5
         configuration.timeoutIntervalForResource = 5

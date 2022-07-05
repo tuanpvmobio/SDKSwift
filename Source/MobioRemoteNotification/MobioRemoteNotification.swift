@@ -12,6 +12,8 @@ protocol MobioRemoteNotificationType {
     
     // MARK: - function
     func registerForPushNotifications()
+    func notificationWillPresent(with notification: UNNotification, completionHandler: @escaping (UNNotificationPresentationOptions) -> Void)
+    func notificationDidReceive(with response: UNNotificationResponse)
 }
 
 final class MobioRemoteNotification: NSObject {
@@ -19,13 +21,14 @@ final class MobioRemoteNotification: NSObject {
     // MARK: - Property
     let center = UNUserNotificationCenter.current()
     var viewModel: RemoteNotificationViewModel!
+    let notificationRepository = NotificationRepository(api: HTTPClient.shared)
 }
 
 extension MobioRemoteNotification: MobioRemoteNotificationType {
     
     func registerForPushNotifications() {
         center.delegate = self
-        center.requestAuthorization(options: [.alert, .sound, .badge, .carPlay]) { [weak self] (granted, error) in
+        center.requestAuthorization(options: [.alert, .sound, .badge]) { [weak self] (granted, error) in
             guard let self = self else { return }
             self.getNotificationSettings()
         }
@@ -39,20 +42,45 @@ extension MobioRemoteNotification: MobioRemoteNotificationType {
     }
     
     func setupNotificationSetting(settings: UNNotificationSettings) {
-        var enable = "false"
         if settings.authorizationStatus == .authorized {
-            print("------ debug ------ Remote notif = True")
-            enable = "true"
             DispatchQueue.main.async {
                 UIApplication.shared.registerForRemoteNotifications()
             }
         } else {
-            enable = "false"
-            print("------ debug ------ Remote notif = No")
-            let notificationInfo = NotificationInfo(permission: "denied")
-            viewModel.sendDeviceData(notificationInfo: notificationInfo)
+            notificationRepository.sendNotificationData(permission: "denied", token: nil)
         }
-        viewModel.trackEnableNotification(enable: enable)
+    }
+    
+    func notificationWillPresent(with notification: UNNotification, completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        let request = notification.request
+        let content = request.content
+        guard let userInfo = content.userInfo as? [String : Any] else { return }
+        DictionaryPrinter.printBeauty(with: userInfo)
+        guard let remoteNotificationData = JSONManager.decode(RemoteNotificationData.self, from: userInfo) else { return }
+        let state = UIApplication.shared.applicationState
+        if state == .background  {
+            if let popupData = remoteNotificationData.data {
+                WebPopupStatusManager.pushDataStatusPopup(popupData: popupData, statusCase: .receive(.normal))
+            }
+            completionHandler([.alert, .badge, .sound])
+        } else if state == .active || state == .inactive {
+            if let popupData = remoteNotificationData.data {
+                WebPopupStatusManager.pushDataStatusPopup(popupData: popupData, statusCase: .receive(.popup))
+            }
+            viewModel.decideShowPopup(remoteNotificationData: remoteNotificationData)
+        }
+    }
+    
+    func notificationDidReceive(with response: UNNotificationResponse) {
+        let notification = response.notification
+        let request = notification.request
+        let content = request.content
+        guard let userInfo = content.userInfo as? [String : Any] else { return }
+        guard let remoteNotificationData = JSONManager.decode(RemoteNotificationData.self, from: userInfo) else { return }
+        let state = UIApplication.shared.applicationState
+        if state == .background || state == .inactive {
+            viewModel.decideShowPopup(remoteNotificationData: remoteNotificationData)
+        }
     }
 }
 
@@ -63,36 +91,13 @@ extension MobioRemoteNotification: UNUserNotificationCenterDelegate {
     public func userNotificationCenter(_ center: UNUserNotificationCenter,
                                        willPresent notification: UNNotification,
                                        withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        let request = notification.request
-        let content = request.content
-        let body = content.body
-        
-        let state = UIApplication.shared.applicationState
-        if state == .background || state == .inactive {
-            print("------ debug 1-----: app from background")
-            completionHandler([.badge, .alert, .sound])
-        } else if state == .active {
-            print("------ debug 1-----: app from active")
-            let urlString = "https://test38.mobio.vn/624aa6e8365e1f7a2b81165c.html"
-            viewModel.showHTMLPopup(urlString: urlString)
-        }
+        notificationWillPresent(with: notification, completionHandler: completionHandler)
     }
     
     public func userNotificationCenter(_ center: UNUserNotificationCenter,
                                        didReceive response: UNNotificationResponse,
                                        withCompletionHandler completionHandler: @escaping () -> Void) {
-        let notification = response.notification
-        let request = notification.request
-        let content = request.content
-        let body = content.body
-        let state = UIApplication.shared.applicationState
-        if state == .background || state == .inactive {
-            print("------ debug 2-----: app from background")
-            let urlString = "https://test38.mobio.vn/624aa6e8365e1f7a2b81165c.html"
-            viewModel.showHTMLPopup(urlString: urlString)
-        } else if state == .active {
-            print("------ debug 2-----: app from active")
-        }
+        notificationDidReceive(with: response)
         completionHandler()
     }
 }

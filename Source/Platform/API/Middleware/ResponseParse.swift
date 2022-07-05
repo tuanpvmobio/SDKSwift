@@ -11,7 +11,6 @@ struct ResponseParse {
     
     static func parseJson(from data: Data?) -> [String: Any] {
         guard let data = data else {
-            print("Error: Did not receive data")
             return [String: Any]()
         }
         if let dictionaryResponse = try! JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {

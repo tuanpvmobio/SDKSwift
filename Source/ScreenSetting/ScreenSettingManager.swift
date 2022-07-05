@@ -17,15 +17,11 @@ protocol ScreenSettingSetable {
 
 struct ScreenSettingManager {
     
-    struct Constant {
-        static let screenSettingKey = "m_screen_setting"
-    }
-    
     func addConfigScreen(_ screens: ScreenSetting) {
         var configScreen = getConfigScreen()
         configScreen.insert(ScreenSetting(title: screens.title, controllerName: screens.controllerName, timeVisit: screens.timeVisit))
         let data = configScreen.map { try? JSONEncoder().encode($0) }
-        UserDefaultManager.set(value: data, forKey: Constant.screenSettingKey)
+        UserDefaultManager.set(value: data, forKey: .screenSetting)
         UserDefaults.standard.synchronize()
     }
 }
@@ -34,7 +30,7 @@ extension ScreenSettingManager: ScreenSettingGetable {
     
     
     func getConfigScreen() -> Set<ScreenSetting> {
-        guard let encodedData = UserDefaults.standard.array(forKey: Constant.screenSettingKey) as? [Data] else {
+        guard let encodedData = UserDefaultManager.getArray(forkey: .screenSetting) as? [Data] else {
             return []
         }
         let screenSettingArray = encodedData.compactMap {

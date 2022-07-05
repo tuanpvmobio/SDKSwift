@@ -8,33 +8,29 @@
 import UIKit
 
 public class Scroll: NSObject {
+    
     static let shared = Scroll()
-    public func trackScrollView(_ scrollView: UIScrollView) {
+    var screenName = ""
+    let trackRepository = TrackingRepository(api: HTTPClient.shared)
+    public func trackScrollView(_ scrollView: UIScrollView, screenName: String) {
         scrollView.delegate = self
+        self.screenName = screenName
     }
 }
 
 extension Scroll: UIScrollViewDelegate {
     
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-
         let height = scrollView.contentSize.height
         let viewed = scrollView.contentOffset.y + scrollView.bounds.size.height
         let pagePercentScrolled = viewed / height * 100
-
-        print("precent \(Int(pagePercentScrolled))")
-    }
     
-    public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-
-        //        let height = scrollView.contentSize.height
-        //            let viewed = scrollView.contentOffset.y + scrollView.bounds.size.height
-        //            let pagePercentScrolled = viewed / height * 100.0
-        //        print("precent \(pagePercentScrolled)")
+        let properties: MobioSDK.Dictionary = [
+            "screen_name": screenName,
+            "percentage_scroll": Int(pagePercentScrolled),
+            "direction": "vertical",
+            "unit": "percent"
+        ]
+        trackRepository.getTrackingData(event: "Scroll Event", properties: properties, type: .scroll)
     }
-    
-    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        
-    }
-
 }

@@ -8,7 +8,7 @@ import Foundation
 import UIKit
 
 class iOSLifecycleMonitor {
-
+    
     private var application = UIApplication.shared
     private var appNotifications = [UIApplication.didEnterBackgroundNotification,
                                     UIApplication.willEnterForegroundNotification,
@@ -28,7 +28,6 @@ class iOSLifecycleMonitor {
     }
     
     func setupListeners() {
-        // Configure the current life cycle events
         let notificationCenter = NotificationCenter.default
         for notification in appNotifications {
             notificationCenter.addObserver(self, selector: #selector(notificationResponse(notification:)), name: notification, object: application)
@@ -46,22 +45,16 @@ class iOSLifecycleMonitor {
         case UIApplication.didFinishLaunchingNotification:
             self.didFinishLaunching(notification: notification)
         case UIApplication.didBecomeActiveNotification:
-            //            self.didBecomeActive(notification: notification)
-            print("didBecomeActive")
+            break
         case UIApplication.willResignActiveNotification:
-            //            self.willResignActive(notification: notification)
-            print("willResignActive")
+            break
         case UIApplication.didReceiveMemoryWarningNotification:
-            //            self.didReceiveMemoryWarning(notification: notification)
-            print("didReceiveMemoryWarning")
+            break
         case UIApplication.significantTimeChangeNotification:
-            //            self.significantTimeChange(notification: notification)
-            print("significantTimeChange")
+            break
         case UIApplication.backgroundRefreshStatusDidChangeNotification:
-            //            self.backgroundRefreshDidChange(notification: notification)
-            print("backgroundRefreshDidChange")
+            break
         case UIApplication.willTerminateNotification:
-            print("------ debug ---------- iOSLifecycleMonitor --------  applicationWillTerminate")
             setupGoldTime()
             break
         default:
@@ -82,8 +75,6 @@ class iOSLifecycleMonitor {
         
         goldTimeArray.forEach { goldTime in
             if goldTime.isGoldTime() {
-                // MARK: - To do
-                //                terminateAction()
                 return
             }
         }

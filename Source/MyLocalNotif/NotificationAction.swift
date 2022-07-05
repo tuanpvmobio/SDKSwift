@@ -44,10 +44,8 @@ class NotificationAction {
         case UNNotificationDefaultActionIdentifier:
             setupOpenAction(response: response)
         case UNNotificationDismissActionIdentifier:
-            print("---------- debug ------- handleNotificationAction ---- UNNotificationDismissActionIdentifier: ----- content = ", response.notification.request.content.userInfo)
             setupCancelAction(response: response)
         default:
-            print("Unknow action")
             break
         }
     }
@@ -59,7 +57,7 @@ class NotificationAction {
         let title = content.title
         let userInfo = content.userInfo
         let properties = ["title": title]
-        track(name: "notification_open", properties: [properties])
+        track(name: "notification_open", properties: properties)
         showPopup(userInfo: userInfo)
     }
     
@@ -69,10 +67,9 @@ class NotificationAction {
         let content = request.content
         let userInfo = content.userInfo
         if let pushID = userInfo[NotificationContentUserInfo.pushData.rawValue] as? String {
-            print("---------- debug ------- notification ---- cancel acction: ----- pushID = ", pushID)
         }
         let properties = ["action": "cancel"]
-        track(name: "notification_cancel_two", properties: [properties])
+        track(name: "notification_cancel_two", properties: properties)
     }
     
     private func showPopup(userInfo: [AnyHashable : Any]) {
@@ -86,8 +83,7 @@ class NotificationAction {
 }
 
 extension NotificationAction: Trackable {
-    
-    func track(name: String, properties: [MobioSDK.Dictionary]) {
+    func track(name: String, properties: MobioSDK.Dictionary) {
         trackingManager.track(name: name, properties: properties)
     }
 }

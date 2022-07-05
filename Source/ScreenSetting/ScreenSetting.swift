@@ -1,5 +1,5 @@
 //
-//  Screen.swift
+//  ScreenSetting.swift
 //
 //
 //  Created by LinhNobi on 04/10/2021.

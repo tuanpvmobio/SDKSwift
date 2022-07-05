@@ -8,7 +8,7 @@
 import WebKit
 
 protocol ScriptMessageHandlerDelegate {
-    func pass(data: MobioSDK.Dictionary)
+    func pass(actionData: PopupBuilderActionData)
 }
 
 class ScriptMessageHandler: NSObject, WKScriptMessageHandler {
@@ -16,8 +16,9 @@ class ScriptMessageHandler: NSObject, WKScriptMessageHandler {
     var delegate: ScriptMessageHandlerDelegate?
     
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        if let dict = message.body as? MobioSDK.Dictionary {
-            delegate?.pass(data: dict)
+        DictionaryPrinter.printBeauty(with: message.body)
+        if let actionDataPopup = JSONManager.decode(PopupBuilderActionData.self, from: message.body) {
+            delegate?.pass(actionData: actionDataPopup)            
         }
     }
 }

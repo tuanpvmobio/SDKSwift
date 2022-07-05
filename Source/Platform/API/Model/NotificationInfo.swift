@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct NotificationInfo: Codable {
+struct NotificationDetail: Codable {
     var permission: String
-    var token = ""
+    var token: String?
 }

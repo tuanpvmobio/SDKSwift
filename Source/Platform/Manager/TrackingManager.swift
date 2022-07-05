@@ -8,11 +8,11 @@
 import Foundation
 
 protocol Trackable {
-    func track(name: String, properties: [MobioSDK.Dictionary])
+    func track(name: String, properties: MobioSDK.Dictionary)
 }
 
 protocol Identifyable {
-    func identify(name: String, properties: [MobioSDK.Dictionary])
+    func identify(name: String, properties: MobioSDK.Dictionary)
 }
 
 class TrackingManager {
@@ -22,22 +22,21 @@ class TrackingManager {
 
 extension TrackingManager: Trackable, Identifyable {
     
-    func track(name: String, properties: [MobioSDK.Dictionary]) {
+    func track(name: String, properties: MobioSDK.Dictionary) {
         trackRepository.getTrackingData(event: name, properties: properties)
     }
     
-    func identify(name: String, properties: [MobioSDK.Dictionary]) {
+    func identify(name: String, properties: MobioSDK.Dictionary) {
         trackRepository.getTrackingData(event: name, properties: properties)
     }
 }
 
 extension MobioSDK: Trackable, Identifyable {
-    
-    public func track(name: String, properties: [MobioSDK.Dictionary]) {
+   public func track(name: String, properties: Dictionary) {
         trackingManager.track(name: name, properties: properties)
     }
     
-    public func identify(name: String, properties: [MobioSDK.Dictionary]) {
+   public func identify(name: String, properties: Dictionary) {
         trackingManager.track(name: name, properties: properties)
     }
 }

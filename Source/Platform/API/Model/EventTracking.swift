@@ -10,16 +10,16 @@ import Foundation
 struct EventTracking {
     
     var source = "popup_builder"
-    var actionTime = 123456789
+    var actionTime = Date().millisecondsSince1970
     var type: String
-    var base: Base?
+    var base: BaseObject?
     var dynamic: [Dynamic]?
     
     init(type: String) {
         self.type = type
     }
     
-    init(type: String, base: Base?) {
+    init(type: String, base: BaseObject?) {
         self.init(type: type)
         self.base = base
     }
@@ -30,10 +30,10 @@ struct EventTracking {
     }
     
     init(type: String, eventPopup: EventPopup) {
-        let actionTime = eventPopup.eventData.fields[0].value
+        let actionTime = eventPopup.eventData.actionTime
         self.actionTime = actionTime
         let eventData = EventDataTracking(actionTime: actionTime)
-        self.dynamic = [Dynamic(eventKey: eventPopup.eventKey, enventData: eventData, includedReport: eventPopup.includedReport)]
+        self.dynamic = [Dynamic(eventKey: eventPopup.eventKey, enventData: eventData, includedReport: true)]
         self.type = type
     }
     
@@ -64,7 +64,7 @@ extension EventTracking: Decodable {
         source = try container.decode(String.self, forKey: .source)
         actionTime = try container.decode(Int.self, forKey: .actionTime)
         type = try container.decode(String.self, forKey: .type)
-        base = try container.decode(Base.self, forKey: .base)
+        base = try container.decode(BaseObject.self, forKey: .base)
         dynamic = try container.decode([Dynamic].self, forKey: .dynamic)
     }
 }

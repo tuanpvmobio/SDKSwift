@@ -26,7 +26,7 @@ struct InternetManager {
     }
     
     func checkInternet(path: NWPath) {
-        DispatchQueue.main.async {        
+        DispatchQueue.main.async {       
             if path.status == .satisfied {
                 delegate?.haveInternet()
             } else {

@@ -17,7 +17,7 @@ final class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        analytics.screenSetting(title: "Home", controllerName: "HomeViewController", timeVisit: [3])
+        analytics.screenSetting(title: "Home", controllerName: "HomeViewController", timeVisit: [30])
         addBehaviors([])
         analytics.screenSetting(title: "RechargeConfirm", controllerName: "FavoriteViewController", timeVisit: [3])
         analytics.screenSetting(title: "Recharge", controllerName: "CategoryViewController", timeVisit: [3])
@@ -41,7 +41,7 @@ final class HomeViewController: UIViewController {
             }
         """
         if let dict = convertToDictionary(text: jsonString) {
-            analytics.track(name: "Home View Did Load", properties: [dict])
+            analytics.track(name: "Home View Did Load", properties: dict)
         }
     }
     
@@ -50,7 +50,6 @@ final class HomeViewController: UIViewController {
             do {
                 return try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
             } catch {
-                print(error.localizedDescription)
             }
         }
         return nil
@@ -59,7 +58,7 @@ final class HomeViewController: UIViewController {
     // MARK: - Action
     @IBAction func gotoCategory(_ sender: Any) {
         let viewController = CategoryViewController.instantiate()
-        navigationController?.pushViewController(viewController, animated: true)
+        present(viewController, animated: true)
     }
     
     @IBAction func recallApiAction(_ sender: Any) {
@@ -71,6 +70,6 @@ final class HomeViewController: UIViewController {
     
     @IBAction func trackAction(_ sender: Any) {
         let properties = ["screenName": "Home"]
-        analytics.track(name: "track_button", properties: [properties])
+        analytics.track(name: "track_button", properties: properties)
     }
 }

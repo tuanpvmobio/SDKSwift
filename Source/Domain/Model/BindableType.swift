@@ -1,9 +1,7 @@
 //
 //  BindableType.swift
-//  SimpleDemoCleanArchitecture
+//  MobioSDK
 //
-//  Created by KIMOCHI on 10/25/20.
-//  Copyright © 2020 trinh.giang.dong. All rights reserved.
 //
 
 import UIKit

@@ -1,6 +1,5 @@
 //
 //  BaseResult.swift
-//  Movie
 
 import Foundation
 

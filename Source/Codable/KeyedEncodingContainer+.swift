@@ -54,7 +54,6 @@ extension KeyedEncodingContainer where K == JSONCodingKeys {
             case let array as [Any]:
                 try encode(array, forKey: key)
             default:
-                debugPrint("⚠️ Unsuported type!", v)
                 continue
             }
         }

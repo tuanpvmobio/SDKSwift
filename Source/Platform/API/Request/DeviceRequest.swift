@@ -9,8 +9,8 @@ import Foundation
 
 class DeviceRequest: ServiceBaseRequest {
     
-    required init(notificationInfo: NotificationInfo) {
-        let params = DeviceParamParser.createParam(notificationInfo: notificationInfo)
+    required init() {
+        let params = DeviceParamParser.createParam()
         super.init(urlString: URLs.deviceUrl, event: "DeviceRegister", params: params)
     }
 }

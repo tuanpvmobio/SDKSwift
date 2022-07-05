@@ -7,12 +7,6 @@
 
 import Foundation
 
-struct DeviceResponse: Codable {
-    let uID, dID, tID: String
+class DeviceResponse: BaseResponse {
     
-    enum CodingKeys: String, CodingKey {
-        case uID = "u_id"
-        case dID = "d_id"
-        case tID = "t_id"
-    }
 }

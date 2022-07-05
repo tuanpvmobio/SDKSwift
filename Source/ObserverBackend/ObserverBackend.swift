@@ -110,14 +110,13 @@ extension ObserverBackend {
         dataPushSatisfyArray.forEach { push in
             let notiResponse = push.notiResponse
             let properties = ["title": notiResponse.title]
-            track(name: "push_satisfy", properties: [properties])
+            track(name: "push_satisfy", properties: properties)
         }
     }
 }
 
 extension ObserverBackend: Trackable {
-    
-    func track(name: String, properties: [MobioSDK.Dictionary]) {
+    func track(name: String, properties: MobioSDK.Dictionary) {
         trackingManager.track(name: name, properties: properties)
     }
 }

@@ -13,7 +13,7 @@ extension MobioSDK {
     public func screen<P: Codable>(screenTitle: String, category: String? = nil, properties: P?) {
     }
     
-    public func scroll(_ scrollView: UIScrollView) {
-        Scroll.shared.trackScrollView(scrollView)
+    public func scroll(_ scrollView: UIScrollView, screenName: String) {
+        Scroll.shared.trackScrollView(scrollView, screenName: screenName)
     }
 }

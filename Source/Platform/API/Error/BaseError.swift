@@ -1,11 +1,11 @@
 //
 //  BaseError.swift
-//  Movie
 
 enum BaseError: Error {
     case networkError
     case httpError(httpCode: Int)
     case unexpectedError
+    case urlError
     
     struct Errors {
         static let networkError = "Network Error"
@@ -14,6 +14,7 @@ enum BaseError: Error {
         static let unexpectedHTTP = "Server responded with unexpected HTTP"
         static let serverLimited  = "Server limited client with response"
         static let serverRejected = "Server rejected payload with HTTP"
+        static let urlError = "HTTP error"
     }
     
     public var errorMessage: String? {
@@ -22,6 +23,8 @@ enum BaseError: Error {
             return Errors.networkError
         case .httpError(let code):
             return getHttpErrorMessage(httpCode: code)
+        case .urlError:
+            return Errors.urlError
         default:
             return Errors.unexpectedError
         }

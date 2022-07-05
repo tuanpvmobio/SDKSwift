@@ -1,6 +1,5 @@
 //
 //  DBManager.swift
-//  CoreDataExample
 //
 //  Created by Sun on 10/12/2021.
 //
@@ -15,27 +14,39 @@ public protocol DBManagerType {
     func delete(object: NSManagedObject)
 }
 
-final public class DBManager {
-    
+@objcMembers final public class DBManager {
     static public let shared: DBManagerType = DBManager()
     
-    lazy public var persistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: "CoreData")
-        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
-            if let error = error as NSError? {
-                fatalError("Unresolved error \(error), \(error.userInfo)")
-            }
-        })
-        return container
-    }()
+    private func createManagedObjectModel() -> NSManagedObjectModel? {
+         let libBundle = Bundle(identifier: "IOS.MobioSDKSwift")
+        if let modelURL = libBundle?.url(forResource: "CoreData", withExtension: "momd") {
+            return NSManagedObjectModel(contentsOf: modelURL)
+        } else {
+            return nil
+        }
+    }
     
-    lazy public var viewContext = persistentContainer.viewContext
+    private func createPersistentStoreCoordinator() -> NSPersistentStoreCoordinator? {
+        if let managedObjectModel = createManagedObjectModel() {
+            let coordinator = NSPersistentStoreCoordinator(managedObjectModel: managedObjectModel)
+            return coordinator
+        } else {
+            return nil
+        }
+    }
+    
+    lazy public var viewContext: NSManagedObjectContext = {
+        let managedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
+        let persistentStoreCoordinator = createPersistentStoreCoordinator()
+        managedObjectContext.persistentStoreCoordinator = persistentStoreCoordinator
+        return managedObjectContext
+    }()
     
     public func save() {
         do {
             try viewContext.save()
         } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
+            print(error)
         }
     }
     

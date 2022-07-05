@@ -30,8 +30,14 @@ struct JSONManager {
     }
     
     static func decode<T: Decodable>(_ type: T.Type, from jsonString: String) -> T? {
-        let data = popupJson.data(using: .utf8)
+        let data = jsonString.data(using: .utf8)
         let result = Self.decode(type, from: data)
+        return result
+    }
+    
+    static func decode<T: Decodable>(_ type: T.Type, from any: Any?) -> T? {
+         let dictionary = any as? MobioSDK.Dictionary
+        let result = Self.decode(type, from: dictionary)
         return result
     }
 }

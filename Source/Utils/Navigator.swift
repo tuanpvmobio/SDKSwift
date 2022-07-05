@@ -48,6 +48,7 @@ extension Navigator: NavigatorType {
     }
     
     func gobackAction(screenType: UIViewController.Type) {
+        
         for controller in navigationController!.viewControllers as Array {
             if controller.isKind(of: screenType.self) {
                 navigationController?.popToViewController(controller, animated: true)
@@ -67,4 +68,9 @@ extension Navigator: NavigatorType {
     }
 }
 
-extension Navigator: Navigationable { }
+extension Navigator: Navigationable {
+    var navigationController: UINavigationController? {
+        let navigationController = topViewController as? UINavigationController
+        return navigationController
+    }
+}

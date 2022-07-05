@@ -13,8 +13,12 @@ struct DictionaryPrinter {
         if let data = try? JSONSerialization.data(withJSONObject: dictionary, options: .prettyPrinted),
            let dataString = String(data: data, encoding: .utf8) {
             print(dataString)
-        } else {
-            print("Wrong param")
+        }
+    }
+    
+    static func printBeauty(with any: Any?) {
+        if let dictionary = any as? MobioSDK.Dictionary {
+            Self.printBeauty(with: dictionary)
         }
     }
 }

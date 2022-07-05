@@ -8,7 +8,7 @@
 import UIKit
 
 // MARK: - Declaration
-public protocol ViewControllerLifeCycleBehavior {
+@objc public protocol ViewControllerLifeCycleBehavior {
     func afterLoading(_ viewController: UIViewController)
     func beforeAppearing(_ viewController: UIViewController)
     func afterAppearing(_ viewController: UIViewController)
@@ -30,9 +30,9 @@ extension ViewControllerLifeCycleBehavior {
 }
 
 // MARK: - UIViewController + Lifecycle Behavior
-public extension UIViewController {
+@objc public extension UIViewController {
     
-    final class LifeCycleBehaviorViewController: UIViewController {
+    @objcMembers final class LifeCycleBehaviorViewController: UIViewController {
         
         private let behaviors: [ViewControllerLifeCycleBehavior]
         weak var timer:Timer?
@@ -69,28 +69,21 @@ public extension UIViewController {
             self.countTime = 0
             self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(timerAction), userInfo: nil, repeats: true)
             
-            //
             screenStart(eventKey: "sdk_mobile_test_screen_start_in_app")
-            //            let configScreens = getConfigAllScreen()
-            //            print("configScreens \(configScreens)")
         }
         
         public override func viewWillDisappear(_ animated: Bool) {
             super.viewWillDisappear(animated)
             applyBehaviors { $0.beforeDisappearing($1) }
             
-            let screenName = UserDefaultManager.getString(forKey: "m_screen_current_view")
-            UserDefaultManager.set(value: screenName, forKey: "m_screen_exit_view")
+            let screenName = UserDefaultManager.getString(forKey: .screenCurrentView)
+            UserDefaultManager.set(value: screenName, forKey: .screenExitView)
             UserDefaults.standard.synchronize()
-            //            screenEnd(eventKey: "sdk_mobile_test_screen_end_in_app")
-            print("viewWillDisappear")
         }
         
         public override func viewDidDisappear(_ animated: Bool) {
             super.viewDidDisappear(animated)
             applyBehaviors { $0.afterDisappearing($1) }
-            print("viewDidDisappear")
-            
             self.timer?.invalidate()
         }
         
@@ -143,17 +136,10 @@ public extension UIViewController {
             }
             
             let controllerName = getControllerName()
-            
+            print("------ debug ------- controllerName = \(controllerName)  -- counter = \(countTime)")
             let screenView = getScreenView(controllerName: controllerName, screens: configScreens)
-            //            let screenView = UserDefaults.standard.array(forKey: "m_screen_config_view") as? [ScreenSetting]
-            //            print(" screenView \(screenView)")
-            //            let encodedData = UserDefaults.standard.array(forKey: ScreenSettingUserDefaults)
-            
-            //            encodedData.map { try! JSONDecoder().decode(ScreenSetting.self, from: $0) }
-            
-            
+ 
             if screenView.count == 0 {
-                //                self.timer?.invalidate()
                 return
             }
             
@@ -169,18 +155,16 @@ public extension UIViewController {
                         "time_visit": countTime,
                         "screen_name": screenView[0].title,
                     ]
-                    NotificationCenter.default.post(name: .sendEvent, object: traits)
-                    trackingRepository.getTrackingData(event: "sdk_mobile_test_time_visit_app", properties: [traits])
+                    // MARK: - To do: send event traits
+//                    NotificationCenter.default.post(name: .sendEvent, object: traits)
+                    trackingRepository.getTrackingData(event: "sdk_mobile_test_time_visit_app", properties: traits, type: .timeVisit)
                     
                 }
-                //                
                 if countTime == timeConfig[timeConfig.count - 1] {
                     self.timer?.invalidate()
                 }
                 //            }
-                // Khởi tạo lại giá trị countTime khi quay lại màn hình
                 if countTime > timeConfig[timeConfig.count - 1] {
-                    //                countTime = 0
                 }
             }
         }
@@ -197,25 +181,24 @@ public extension UIViewController {
             if screenView.count == 0 {
                 return
             }
-            UserDefaultManager.set(value: screenView[0].title, forKey: "m_screen_current_view")
+            UserDefaultManager.set(value: screenView[0].title, forKey: .screenCurrentView)
             UserDefaults.standard.synchronize()
             
             let properties: MobioSDK.Dictionary = [
-                "time": Date().iso8601(),
-                "screen_name": screenView[0].title,
+                "screen_name": screenView[0].title
             ]
-            trackingRepository.getTrackingData(event: eventKey, properties: [properties])
+            trackingRepository.getTrackingData(event: eventKey, properties: properties, type: .view)
             
         }
         
         private func screenEnd(eventKey: String) {
             
-            let screenName = UserDefaultManager.getString(forKey: "m_screen_current_view")
+            let screenName = UserDefaultManager.getString(forKey: .screenCurrentView)
             let properties: MobioSDK.Dictionary = [
                 "time": Date().iso8601(),
                 "screen_name": screenName ,
             ]
-            trackingRepository.getTrackingData(event: eventKey, properties: [properties])
+            trackingRepository.getTrackingData(event: eventKey, properties: properties, type: .default)
         }
     }
     
@@ -228,27 +211,21 @@ public extension UIViewController {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
-        print("chạm \(touches.hashValue)")
     }
 }
 
 
 extension UIApplication {
     
-    class func getTopViewController(base: UIViewController? = UIApplication.shared.delegate?.window??.rootViewController) -> UIViewController? {
-        
+    class func getTopViewController(base: UIViewController? = UIApplication.shared.windows.last?.rootViewController) -> UIViewController? {
         if let nav = base as? UINavigationController {
             return getTopViewController(base: nav.topViewController)
-            
         } else if let tab = base as? UITabBarController, let selected = tab.selectedViewController {
             return getTopViewController(base: selected)
-            
         } else if let presented = base?.presentedViewController {
-            
             if presented.view.tag == 1000 {
                 return base
             }
-            
             return getTopViewController(base: presented)
         }
         return base

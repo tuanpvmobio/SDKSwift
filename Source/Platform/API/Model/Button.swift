@@ -7,10 +7,7 @@
 
 import Foundation
 
-struct Button {
-    var type = "close"
-    var name = "this is name"
-    var id = "this is id"
+struct Button: Codable {
+    var type: String?
+    var id: String?
 }
-
-extension Button: Encodable { }

@@ -7,13 +7,13 @@
 
 import Foundation
 
-struct Identity: Encodable {
-    
+struct Identity: Codable {
     let sdk: SDK
-    let identityDetail: IdentityDetail
+    let device: Detail
+    let actionTime = Date().millisecondsSince1970
 
     enum CodingKeys: String, CodingKey {
-        case sdk
-        case identityDetail = "identity_detail"
+        case sdk, device
+        case actionTime = "action_time"
     }
 }

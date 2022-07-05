@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina5_5" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -169,7 +169,7 @@ Vui lòng tiếp tục để hoàn thành giao dịch của bạn. Vui lòng ti�
                 <constraint firstItem="4D2-Ly-zFD" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="Q7q-os-8Jr"/>
                 <constraint firstItem="SSX-hd-ZPz" firstAttribute="width" secondItem="i5M-Pr-FkT" secondAttribute="width" multiplier="0.8" id="ROi-yi-gyc"/>
                 <constraint firstItem="SSX-hd-ZPz" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="UXm-Gf-605"/>
-                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="4D2-Ly-zFD" secondAttribute="bottom" id="aZf-80-VNn"/>
+                <constraint firstAttribute="bottom" secondItem="4D2-Ly-zFD" secondAttribute="bottom" id="aZf-80-VNn"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="4D2-Ly-zFD" secondAttribute="trailing" id="pM3-kw-oVf"/>
             </constraints>
             <point key="canvasLocation" x="-542" y="141"/>

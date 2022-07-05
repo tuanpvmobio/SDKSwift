@@ -1,6 +1,5 @@
 //
 //  CoreDataBaseRequest.swift
-//  CoreDataExample
 //
 //  Created by Sun on 23/12/2021.
 //

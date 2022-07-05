@@ -39,8 +39,8 @@ internal class IOSVendorSystem {
         return device.model
     }
     
-    var identifierForVendor: String? {
-        return device.identifierForVendor?.uuidString
+    var identifierForVendor: String {
+        return device.identifierForVendor?.uuidString ?? ""
     }
     
     var systemName: String {

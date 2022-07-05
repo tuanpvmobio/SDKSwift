@@ -7,5 +7,5 @@
 
 import Foundation
 
-struct FailAPIServerResponse: Codable {
+class FailAPIServerResponse: BaseResponse {
 }

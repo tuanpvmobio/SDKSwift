@@ -1,6 +1,6 @@
 //
 //  GradientButton.swift
-//  MobioBank
+//  MobioSDK
 //
 //  Created by Sun on 14/10/2021.
 //

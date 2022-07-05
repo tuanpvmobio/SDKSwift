@@ -8,5 +8,5 @@
 import Foundation
 
 struct EventDataTracking: Codable {
-    var actionTime = 0
+    var actionTime = Date().millisecondsSince1970
 }

@@ -111,20 +111,19 @@ open class AcceptPopupViewController: UIViewController {
     // MARK: - Data
     private func trackCloseAction() {
         let properties = ["title": notiResponse.title]
-        track(name: "popup_close", properties: [properties])
+        track(name: "popup_close", properties: properties)
     }
     
     private func trackOpenAction() {
         let properties = ["title": notiResponse.title]
-        track(name: "popup_open", properties: [properties])
+        track(name: "popup_open", properties: properties)
     }
 }
 
 extension AcceptPopupViewController: XibSceneBased { }
 
 extension AcceptPopupViewController: Trackable {
-    
-    func track(name: String, properties: [MobioSDK.Dictionary]) {
+    func track(name: String, properties: MobioSDK.Dictionary) {
         trackingManager.track(name: name, properties: properties)
     }
 }

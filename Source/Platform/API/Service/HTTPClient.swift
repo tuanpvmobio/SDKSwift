@@ -21,17 +21,17 @@ public class HTTPClient {
         let params = input.params
         let event = input.event
         
-        guard let url = URL(string: input.urlString) else { return }
+        guard let url = URL(string: input.urlString) else {
+            completion(nil, BaseError.urlError)
+            return
+        }
         let data = try? JSONSerialization.data(withJSONObject: params, options: [])
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.httpBody = data
         session.dataTask(with: request) { data, response, error in
             guard error == nil else {
-                print("Error: error calling POST")
-                print(error!)
                 let failApi = FailAPI(urlString: input.urlString, event: event, params: params)
-                print("--------- debug ---------- failApi = ", failApi)
                 completion(nil, BaseError.unexpectedError)
                 return
             }

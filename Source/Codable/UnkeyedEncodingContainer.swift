@@ -27,7 +27,7 @@ extension UnkeyedEncodingContainer {
                 var values = nestedUnkeyedContainer()
                 try values.encode(array)
             default:
-                debugPrint("⚠️ Unsuported type!", v)
+                break
             }
         }
     }

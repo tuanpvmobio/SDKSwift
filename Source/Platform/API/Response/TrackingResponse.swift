@@ -7,6 +7,6 @@
 
 import Foundation
 
-struct TrackingResponse: Codable {
+class TrackingResponse: BaseResponse {
     
 }
