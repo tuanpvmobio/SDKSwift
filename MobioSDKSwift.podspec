@@ -29,4 +29,6 @@ Pod::Spec.new do |spec|
   spec.resources = ['*.{xib}']
   spec.resources = 'Source/CoreData/DataBase/*.xcdatamodeld'
 
+  spec.pod_target_xcconfig = { 'PRODUCT_BUNDLE_IDENTIFIER': 'IOS.MobioSDKSwift' }
+
 end
